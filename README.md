@@ -22,7 +22,11 @@
 
 ## Быстрый старт
 
+
+
 ### 1. Установить зависимости
+Клонировать проект:
+git clone [https://github.com/username/shortlink-qr-yii2.git](https://github.com/username/shortlink-qr-yii2.git)
 ```bash
 composer install
 ```
@@ -36,6 +40,9 @@ cp config/db.php.example config/db.php
 Отредактируйте `config/db.php`.
 
 ### 3. Выполнить миграции
+Настроить БД:
+- создать базу `shortlink_qr`
+- настроить `config/db.php`
 ```bash
 php yii migrate
 ```
