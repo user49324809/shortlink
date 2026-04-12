@@ -56,7 +56,8 @@ php yii serve --port=8080
 ```text
 http://localhost:8080
 ```
-
+Запуск docker
+docker-compose up -d --build
 ## Альтернатива: Nginx / Apache
 DocumentRoot должен указывать на папку `web/`.
 
