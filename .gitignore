@@ -1,8 +1,7 @@
-/vendor
-/runtime/*
-/web/assets/*
-/.idea
-/.vscode
+/vendor/
+/runtime/
+/web/assets/
+.idea/
+.vscode/
 .env
-composer.lock
 /config/db.php
