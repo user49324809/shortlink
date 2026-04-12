@@ -5,3 +5,4 @@
 /.vscode
 .env
 composer.lock
+config/db.php
