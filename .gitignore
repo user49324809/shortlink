@@ -1,0 +1,7 @@
+/vendor
+/runtime/*
+/web/assets/*
+/.idea
+/.vscode
+.env
+composer.lock

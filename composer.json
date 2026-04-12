@@ -1,0 +1,36 @@
+{
+  "name": "openai/shortlink-qr",
+  "description": "Yii2 Basic app: short links + QR codes",
+  "type": "project",
+  "license": "proprietary",
+  "require": {
+    "php": ">=8.1",
+    "yiisoft/yii2": "~2.0.49",
+    "yiisoft/yii2-bootstrap5": "~2.0.5",
+    "yiisoft/yii2-jui": "~2.0.0",
+    "endroid/qr-code": "^5.0"
+  },
+  "require-dev": {
+    "yiisoft/yii2-debug": "~2.1.0",
+    "yiisoft/yii2-gii": "~2.2.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
+    },
+    "sort-packages": true
+  },
+    "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "scripts": {
+    "post-create-project-cmd": [
+      "yii\\composer\\Installer::postCreateProject"
+    ]
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
