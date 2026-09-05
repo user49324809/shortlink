@@ -1,13 +1,20 @@
-version: '3.8'
-
 services:
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: dockerfile
     container_name: yii2_app
     ports:
       - "8080:80"
-    volumes:
-      - .:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_NAME: shortlink_qr
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD:-change-me}
+      COOKIE_VALIDATION_KEY: ${COOKIE_VALIDATION_KEY:-development-only-key}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-change-me}
     depends_on:
       - db
 
@@ -16,7 +23,10 @@ services:
     container_name: yii2_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-change-me}
       MYSQL_DATABASE: shortlink_qr
-    ports:
-      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:

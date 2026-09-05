@@ -11,14 +11,14 @@
 ## Что умеет
 - Принимает URL на главной странице
 - Валидирует формат URL
-- Проверяет доступность ресурса через cURL
+- Проверяет доступность публичного ресурса через cURL
 - Сохраняет ссылку в БД
 - Генерирует короткий код и QR
 - Возвращает результат через Ajax без перезагрузки страницы
 - Делает редирект по короткой ссылке
 - Ведёт логи переходов с внешним IP
 - Считает количество переходов
-- Имеет admin-страницу со списком ссылок, счетчиками и логами
+- Имеет защищённую admin-страницу со списком ссылок, счетчиками и логами
 
 ## Быстрый старт
 
@@ -26,7 +26,11 @@
 
 ### 1. Установить зависимости
 Клонировать проект:
-git clone [https://github.com/username/shortlink-qr-yii2.git](https://github.com/username/shortlink-qr-yii2.git)
+```bash
+git clone https://github.com/user49324809/shortlink.git
+cd shortlink
+```
+
 ```bash
 composer install
 ```
@@ -37,7 +41,7 @@ composer install
 cp config/db.php.example config/db.php
 ```
 
-Отредактируйте `config/db.php`.
+Отредактируйте `config/db.php` или задайте переменные `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER` и `DB_PASSWORD`.
 
 ### 3. Выполнить миграции
 Настроить БД:
@@ -56,8 +60,26 @@ php yii serve --port=8080
 ```text
 http://localhost:8080
 ```
-Запуск docker
-docker-compose up -d --build
+### 5. Настроить административный доступ
+
+Перед запуском задайте переменные окружения:
+
+```dotenv
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=use-a-long-random-password
+COOKIE_VALIDATION_KEY=use-another-long-random-value
+TRUST_PROXY_HEADERS=false
+```
+
+В production включайте `TRUST_PROXY_HEADERS=true` только за доверенным reverse proxy, который перезаписывает клиентские заголовки.
+
+### Запуск в Docker
+
+```bash
+cp .env.example .env
+docker compose up -d --build
+docker compose exec app php yii migrate --interactive=0
+```
 ## Альтернатива: Nginx / Apache
 DocumentRoot должен указывать на папку `web/`.
 
@@ -68,15 +90,15 @@ DocumentRoot должен указывать на папку `web/`.
 
 ## Маршруты
 - `/` — форма генерации
-- `/admin` — admin-страница со списком ссылок и логов
+- `/admin` — admin-страница со списком ссылок и логов, защищённая HTTP Basic Authentication
 - `/site/shorten` — Ajax-обработчик
 - `/{code}` — редирект по короткой ссылке
 
 ## Проверка доступности
-Выполняется локально через cURL. Внешние API не используются.
+Выполняется локально через cURL. Внешние API не используются. Локальные, приватные и зарезервированные IP-адреса блокируются; автоматический переход по редиректам отключён для защиты от SSRF.
 Если сайт отвечает кодом `2xx` или `3xx`, URL считается доступным.
 
 ## Примечания
 - При повторном вводе одного и того же URL используется уже существующая запись.
 - QR-код встроен в страницу в формате base64 PNG.
-- IP берётся из `REMOTE_ADDR`; при наличии прокси дополнительно учитываются `X-Forwarded-For` / `X-Real-IP`.
+- По умолчанию IP берётся только из `REMOTE_ADDR`. Заголовки `X-Forwarded-For` и `X-Real-IP` учитываются только при явном включении `TRUST_PROXY_HEADERS`.

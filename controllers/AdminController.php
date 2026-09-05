@@ -6,10 +6,32 @@ use app\models\ShortUrl;
 use app\models\ShortUrlHit;
 use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
+use Yii;
 use yii\web\Controller;
+use yii\web\UnauthorizedHttpException;
 
 class AdminController extends Controller
 {
+    public function beforeAction($action): bool
+    {
+        $expectedUser = (string) Yii::$app->params['adminUsername'];
+        $expectedPassword = (string) Yii::$app->params['adminPassword'];
+        $user = (string) Yii::$app->request->authUser;
+        $password = (string) Yii::$app->request->authPassword;
+
+        if (
+            $expectedUser === '' ||
+            $expectedPassword === '' ||
+            !hash_equals($expectedUser, $user) ||
+            !hash_equals($expectedPassword, $password)
+        ) {
+            Yii::$app->response->headers->set('WWW-Authenticate', 'Basic realm="ShortLink Admin"');
+            throw new UnauthorizedHttpException('Требуется авторизация администратора.');
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function behaviors(): array
     {
         return [

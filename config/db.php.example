@@ -2,9 +2,14 @@
 
 return [
     'class' => yii\db\Connection::class,
-    'dsn' => 'mysql:host=127.0.0.1;dbname=shortlink_qr;charset=utf8mb4',
-    'username' => 'root',
-    'password' => 'root',
+    'dsn' => sprintf(
+        'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
+        getenv('DB_HOST') ?: '127.0.0.1',
+        getenv('DB_PORT') ?: '3306',
+        getenv('DB_NAME') ?: 'shortlink_qr'
+    ),
+    'username' => getenv('DB_USER') ?: 'root',
+    'password' => getenv('DB_PASSWORD') ?: '',
     'charset' => 'utf8mb4',
     'tablePrefix' => '',
     'attributes' => [

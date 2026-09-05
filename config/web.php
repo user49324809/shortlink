@@ -13,7 +13,7 @@ return [
     ],
     'components' => [
         'request' => [
-            'cookieValidationKey' => 'replace-with-random-secret-key',
+            'cookieValidationKey' => getenv('COOKIE_VALIDATION_KEY') ?: 'development-only-key',
             'parsers' => [
                 'application/json' => yii\web\JsonParser::class,
             ],
